@@ -88,12 +88,7 @@ export type OptionalPropertyNamesOf<T> = never;
 export type RequiredPropertyNamesOf<T> = never;
 console.log(a, b, data, myStrictObject);
 console.log(typeof CSSProperties);
-function CorrectDepComponent(): JSX.Element {
-    const [count, setCount] = useState(0);
-    const data = 10;
-
-    useEffect(() => {
-        console.log(count + data);
-    }, [count, data]); // 'data' is now in the dependency array
-    return <div>Count: {count}, Data: {data}</div>;
+function useValidHookCall(): [number, React.Dispatch<React.SetStateAction<number>>] {
+    const [count, setCount] = useState(0); // This hook call is now unconditional
+    return [count, setCount];
 }
