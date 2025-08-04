@@ -1,123 +1,116 @@
-// ==================================================================================================
-// index.ts (Corrected version of lint-violations.ts)
-// This file demonstrates how to write code that adheres to common ESLint rules for TypeScript,
-// React, Angular, and related plugins. It should pass linting without errors.
-// ==================================================================================================
-
-// --- @typescript-eslint/eslint-plugin ---
-// Rule: @typescript-eslint/no-explicit-any - CORRECTED
-// Explicit types used instead of 'any'.
-let data: string = "This is no longer a violation.";
-
-// Rule: @typescript-eslint/explicit-function-return-type - CORRECTED
-function hasReturnType(): string {
-    return "This function now has an explicit return type.";
-}
-
-// Rule: @typescript-eslint/no-unused-vars - CORRECTED
-// All parameters are now used.
-function usedParams(used: string): void {
-    console.log(used); // Parameter 'used' is now utilized.
-}
-
-// Rule: @typescript-eslint/ban-types - CORRECTED
-// 'Record<string, unknown>' or a specific interface used instead of 'Object'.
-let myStrictObject: Record<string, unknown> = {};
-
-// --- eslint-plugin-import ---
-// Rule: import/no-duplicates - CORRECTED
-// All imports from the same module are consolidated into one statement.
-import { a, b } from './some-module'; // Assuming 'some-module' exists in your project.
-
-// Rule: import/no-unresolved - CORRECTED
-// This import now points to a module that should exist (e.g., a standard lib or one you create).
-// For demonstration, replacing with a common type from a standard library.
-import { CSSProperties } from 'react'; // Example: importing a type from 'react'.
-
-
+/**
+ * - Mix: Provide a type consistent with the result of `Object.assign(A, B)`
+ * @template A first object type
+ * @template B second object type
+ *
+ * @example
+ *
+ * type Example = Mix<
+ *    { a: number; b: string },
+ *    { a: string; c: number[] }
+ * >;
+ * // results in
+ * {
+ *    a: string; // second object wins in event of collision
+ *    b: string;
+ *    c: number;
+ * }
+ */
 // --- @angular-eslint/eslint-plugin ---
 import { Component, OnInit } from '@angular/core';
-
-// Rule: @angular-eslint/component-selector - CORRECTED
-// The selector now follows a required prefix (e.g., 'app-').
-// Rule: @angular-eslint/component-class-suffix - CORRECTED
-// The class name now ends with 'Component'.
-@Component({
-    selector: 'app-my-angular-component', // Corrected selector
-    template: '<div>Hello Angular</div>'
-})
-class MyAppAngularComponent implements OnInit { // Corrected class name
-    constructor() { }
-    ngOnInit(): void { }
-}
-
 // --- eslint-plugin-react (in TSX) ---
 import React, { useState, useEffect } from 'react';
 
-interface Props {
-    // Rule: react/prop-types - Typically disabled in TS configs due to TS handling types.
-    // If enabled, this would require prop-types runtime checks, which are redundant with TypeScript.
-    // Assuming the rule is disabled or handled by TS types.
-    someProp: string;
+
+// Rule: react/no-unknown-property
+// 'class' is not a valid property in JSX; should be 'className'
+const InvalidProperty = () => <div class="my-class"></div>;
+    
+type ProblemMerge = { a: number; b: string } & { a: string; c: number[] };
+
+console.log(
+  Object.assign({ a: 44, b: "hello" }, { a: "from second object", c: 99 })
+);
+
+// IMPLEMENT ME
+export type Mix<A, B> = never;
+
+/**
+ * - ExtractPropertyNamesAssignableTo: obtain the names of properties assignable to a type
+ * @template T object type to operate on
+ * @template S type to check property values against
+ *
+ * @example
+ * type Example = ExtractPropertyNamesAssignableTo<
+ * {
+ *   a(): Promise<void>;
+ *   b: PromiseLike<string>;
+ *   c(): number;
+ *   d: Array<Promise<any>>;
+ * }, (...args: any[]) => any
+ * >;
+ * // results in
+ * "a" | "c"
+ */
+interface Foo {
+  x: string;
+  y: number;
 }
 
-// Rule: react/jsx-key - CORRECTED
-// 'key' prop added to list items.
-function ComponentWithKeys({ items }: { items: string[] }): JSX.Element {
-    return (
-        <ul>
-            {items.map((item, index) => <li key={index}>{item}</li>)} {/* Key added */}
-        </ul>
-    );
-}
+// IMPLEMENT ME
+export type ExtractPropertyNamesAssignableTo<T, S> = never;
 
-// Rule: react/no-unknown-property - CORRECTED
-// 'className' used instead of 'class' for JSX properties.
-const ValidProperty = (): JSX.Element => <div className="my-class"></div>;
+type X = ExtractPropertyNamesAssignableTo<
+  Window,
+  (a: Function, b: number) => any
+>;
 
-// --- eslint-plugin-react-hooks ---
-// Rule: react-hooks/rules-of-hooks - CORRECTED
-// Hooks are now called unconditionally at the top level of the function component.
-function useValidHookCall(): [number, React.Dispatch<React.SetStateAction<number>>] {
-    const [count, setCount] = useState(0); // This hook call is now unconditional
-    return [count, setCount];
-}
+/**
+ * - OptionalPropertyNamesOf: Extract the property names of an object type that are optional
+ *
+ * @template T object type to extract optional property names from
+ *
+ * @example
+ *
+ * const x: OptionalPropertyNamesOf<{ a: string; b?: number }>;
+ * // results in
+ * 'b'
+ *
+ */
 
-// Rule: react-hooks/exhaustive-deps - CORRECTED
-// 'data' is now included in the dependency array.
-function CorrectDepComponent(): JSX.Element {
-    const [count, setCount] = useState(0);
-    const data = 10;
+ // IMPLEMENT ME
+export type OptionalPropertyNamesOf<T> = never;
 
-    useEffect(() => {
-        console.log(count + data);
-    }, [count, data]); // 'data' is now in the dependency array
-    return <div>Count: {count}, Data: {data}</div>;
+/**
+ * - RequiredPropertyNamesOf: Extract the property names of an object type that are required
+ *
+ * @template T object type to extract required property names from
+ *
+ * @example
+ *
+ * const y: RequiredPropertyNamesOf<{ a: string; b?: number }>;
+ * // results in
+ * 'a'
+ */
+
+ // IMPLEMENT ME
+export type RequiredPropertyNamesOf<T> = never;
+
+// Rule: react-hooks/exhaustive-deps
+function MissingDepComponent() {
+  const [count, setCount] = useState(0);
+  const data = 10;
+  
+  // 'data' is used in the effect but not in the dependency array
+  useEffect(() => {
+    console.log(count + data);
+  }, [count]);
 }
 
 
 // --- eslint-plugin-jsx-a11y ---
-// Rule: jsx-a11y/alt-text - CORRECTED
-// 'alt' attribute added to images.
-const ImageComponent = (): JSX.Element => <img src="logo.png" alt="Company Logo" />;
+// Rule: jsx-a11y/alt-text
+const ImageComponent = () => <img src="logo.png" />;
 
-// Rule: jsx-a11y/anchor-is-valid - CORRECTED
-// Anchor has a valid href or role attribute.
-const AnchorComponent = (): JSX.Element => <a href="#valid-link">Click Me</a>;
-
-// Exporting some components to avoid unused variable warnings if not used elsewhere
-export {
-    hasReturnType,
-    usedParams,
-    MyAppAngularComponent,
-    ComponentWithKeys,
-    ValidProperty,
-    useValidHookCall,
-    CorrectDepComponent,
-    ImageComponent,
-    AnchorComponent
-};
-
-// Example usage to prevent 'no-unused-vars' for imported modules if not explicitly used
-console.log(a, b, data, myStrictObject);
-console.log(typeof CSSProperties);
+// Rule: jsx-a11y/anchor-is-valid
+const AnchorComponent = () => <a onClick={() => {}}>Click Me</a>;
