@@ -7,10 +7,6 @@ import { Component, OnInit } from '@angular/core';
 // --- eslint-plugin-react (in TSX) ---
 import React, { useState, useEffect } from 'react';
 
-
-// Rule: react/no-unknown-property
-// 'class' is not a valid property in JSX; should be 'className'
-const InvalidProperty = () => <div class="my-class"></div>;
     
 type ProblemMerge = { a: number; b: string } & { a: string; c: number[] };
 
