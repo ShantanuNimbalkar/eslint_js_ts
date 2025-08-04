@@ -88,5 +88,12 @@ export type OptionalPropertyNamesOf<T> = never;
 export type RequiredPropertyNamesOf<T> = never;
 console.log(a, b, data, myStrictObject);
 console.log(typeof CSSProperties);
+function CorrectDepComponent(): JSX.Element {
+    const [count, setCount] = useState(0);
+    const data = 10;
 
-const AnchorComponent = (): JSX.Element => <a href="#valid-link">Click Me</a>;
+    useEffect(() => {
+        console.log(count + data);
+    }, [count, data]); // 'data' is now in the dependency array
+    return <div>Count: {count}, Data: {data}</div>;
+}
