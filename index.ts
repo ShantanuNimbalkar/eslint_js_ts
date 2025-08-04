@@ -64,8 +64,8 @@ function MissingDepComponent() {
 
 
 // --- eslint-plugin-jsx-a11y ---
-// Rule: jsx-a11y/alt-text
+// Rule: jsx-a11y_alt-text
 const ImageComponent = () => <img src="logo.png" />;
 
-// Rule: jsx-a11y/anchor-is-valid
+// Rule: jsx-a11y_anchor-is-valid
 const AnchorComponent = () => <a onClick={() => {}}>Click Me</a>;
