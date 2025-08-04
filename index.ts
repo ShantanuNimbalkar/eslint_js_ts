@@ -86,3 +86,5 @@ export type OptionalPropertyNamesOf<T> = never;
 
  // IMPLEMENT ME
 export type RequiredPropertyNamesOf<T> = never;
+console.log(a, b, data, myStrictObject);
+console.log(typeof CSSProperties);
