@@ -88,3 +88,5 @@ export type OptionalPropertyNamesOf<T> = never;
 export type RequiredPropertyNamesOf<T> = never;
 console.log(a, b, data, myStrictObject);
 console.log(typeof CSSProperties);
+
+const AnchorComponent = (): JSX.Element => <a href="#valid-link">Click Me</a>;
